@@ -11,8 +11,8 @@ class StoreRegistrationRequest extends FormRequest
      *
      * @return bool
      */
-    protected $stopOnFirstFailure=true;
-    protected $redirectRoute='Register.create';
+//    protected $stopOnFirstFailure=true;
+    //protected $redirectRoute='Register.create';
     public function authorize()
     {
         return true;
@@ -26,9 +26,9 @@ class StoreRegistrationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>'required|min=5',
-            'email'=>'required|email',
-            'password'=>'required|min:8'
+            'name' =>'required',
+            'email'=>'required|email|unique:users',
+            'password'=>'required'
         ];
     }
 

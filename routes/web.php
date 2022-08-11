@@ -14,12 +14,14 @@ use \App\Http\Controllers\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return 'home';
+})->name("home");
 
 Route::get('/register',[Auth\RegistrationController::class,'Create'])->name('Register.create');
 Route::post('/register',[Auth\RegistrationController::class,'Store'])->name('Register.Store');
 Route::middleware('auth')->group(function (){
+    Route::post('/logout',Auth\LogoutController::class)->name('logout');
+    Route::get('/test',[Auth\RegistrationController::class,'test'])->name('test');
     Route::get('/email/verify',[Auth\EmailVerifyController::class,'Create'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}',[Auth\EmailVerifyController::class,'EmailVerification'])->middleware('signed')->name('verification.verify');
     Route::post('/email/verification-notification',[Auth\EmailVerifyController::class,'ReSend'])->middleware('throttle:6,1')->name('verification.send');

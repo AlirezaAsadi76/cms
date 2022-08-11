@@ -19,7 +19,11 @@ Route::get('/', function () {
 
 Route::get('/register',[Auth\RegistrationController::class,'Create'])->name('Register.create');
 Route::post('/register',[Auth\RegistrationController::class,'Store'])->name('Register.Store');
+Route::get('/login',[Auth\LogingController::class,'Index'])->name('login');
+Route::Post('/login',[Auth\LogingController::class,'Authenticate'])->name('login');
 Route::middleware('auth')->group(function (){
+
+
     Route::post('/logout',Auth\LogoutController::class)->name('logout');
     Route::get('/test',[Auth\RegistrationController::class,'test'])->name('test');
     Route::get('/email/verify',[Auth\EmailVerifyController::class,'Create'])->name('verification.notice');

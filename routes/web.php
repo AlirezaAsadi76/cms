@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,5 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/register',[\App\Http\Controllers\Auth\RegistrationController::class,'Create'])->name('Register.create');
-Route::post('/register',[\App\Http\Controllers\Auth\RegistrationController::class,'Store'])->name('Register.Store');
+Route::get('/register',[Auth\RegistrationController::class,'Create'])->name('Register.create');
+Route::post('/register',[Auth\RegistrationController::class,'Store'])->name('Register.Store');
+Route::middleware('auth')->group(function (){
+    Route::get('/email/verify',[Auth\EmailVerifyController::class,'Create'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}',[Auth\EmailVerifyController::class,'EmailVerification'])->middleware('signed')->name('verification.verify');
+    Route::post('/email/verification-notification',[Auth\EmailVerifyController::class,'ReSend'])->middleware('throttle:6,1')->name('verification.send');
+
+});

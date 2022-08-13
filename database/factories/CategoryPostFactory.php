@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,12 +18,11 @@ class CategoryPostFactory extends Factory
      */
     public function definition()
     {
+        $postcount=Post::all()->count();
+        $categorycount=Category::all()->count();
         return [
-            'category_id' => rand(1,5),
-            'post_id' =>rand(1,100),
-
-            'created_at'=>now(),
-            'updated_at'=>now(),
+            'category_id' => rand(1,$categorycount),
+            'post_id' =>rand(1,$postcount),
         ];
     }
 }

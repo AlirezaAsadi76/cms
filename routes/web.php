@@ -40,8 +40,8 @@ Route::middleware('auth')->group(function (){
     Route::get('/email/verify/{id}/{hash}',[Auth\EmailVerifyController::class,'EmailVerification'])->middleware('signed')->name('verification.verify');
     Route::post('/email/verification-notification',[Auth\EmailVerifyController::class,'ReSend'])->middleware('throttle:6,1')->name('verification.send');
 
+});
 
-
-
-
+Route::middleware('auth')->prefix('admin')->group(function (){
+    Route::resource('post',Controllers\PostController::class);
 });

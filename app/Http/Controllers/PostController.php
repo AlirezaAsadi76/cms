@@ -4,83 +4,78 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Category;
 use App\Models\Post;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $posts=Post::orderBy('id','Desc')->where('post_type','=','post')->get();
+        return view('Admin.post.index',compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        $categories=Category::orderBy('id','ASC')->get();
+
+        return view('Admin.post.create',compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePostRequest  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(StorePostRequest $request)
     {
-        //
+        //dd(request()->all());
+        $post=new Post();
+        $post->user_id=Auth::id();
+        $post->details=$request->details;
+        $post->title=$request->title;
+        $post->thumbnail=$request->thumbnail;
+        $post->sub_title=$request->sub_title;
+        $post->slug=str_slug($request->title);
+        $post->post_type='post';
+        $post->is_published=$request->publish;
+        $post->save();
+        $post->categories()->sync($request->category_id,false);
+        session()->flash("message","Post created successfully");
+        return redirect()->route('posts.index');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function show(Post $post)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Post $post)
     {
-        //
+
+        $categories=Category::orderBy('id','ASC')->get();
+        return view('Admin.post.edit',compact('post','categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePostRequest  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+
+        $post->details=$request->details;
+        $post->title=$request->title;
+        $post->thumbnail=$request->thumbnail;
+        $post->sub_title=$request->sub_title;
+        $post->slug=str_slug($request->title);
+        $post->post_type='post';
+        $post->is_published=$request->publish;
+        $post->update();
+        $post->categories()->sync($request->category_id,false);
+        session()->flash("message","Post update successfully");
+        return redirect()->route('posts.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        session()->flash('delete-message', 'Post deleted successfully');
+        return redirect()->route('posts.index');
     }
 }

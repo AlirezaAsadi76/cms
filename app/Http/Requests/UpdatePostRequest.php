@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
@@ -13,7 +14,8 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $post=Post::find($this->route('post'));
+        return $post && $this->user()->can('update',$post);
     }
 
     /**
@@ -24,7 +26,19 @@ class UpdatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'thumbnail'=>'required',
+            'title'=>'required',
+            'details'=>'required',
+            'category_id'=>'required'
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'thumbnail.required'=>'Enter thumbnail url',
+            'title.required'=>'Enter title',
+            'details.required'=>'Enter details',
+            'category_id.required'=>'select categories'
         ];
     }
 }

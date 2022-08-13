@@ -20,8 +20,10 @@ Route::get('/', function () {
 
 Route::get('/register',[Auth\RegistrationController::class,'Create'])->name('Register.create');
 Route::post('/register',[Auth\RegistrationController::class,'Store'])->name('Register.Store');
-Route::get('/login',[Auth\LogingController::class,'Index'])->name('login');
-Route::Post('/login',[Auth\LogingController::class,'Authenticate'])->name('login');
+Route::middleware('throttle:login')->group(function (){
+    Route::get('/login',[Auth\LogingController::class,'Index'])->name('login');
+    Route::Post('/login',[Auth\LogingController::class,'Authenticate'])->name('login');
+});
 
 Route::get('/',[Controllers\WebsiteController::class,'index'])->name('web.index');
 Route::get('category/{slug}',[Controllers\WebsiteController::class , 'category'])->name('web.category');

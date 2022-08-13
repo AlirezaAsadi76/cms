@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -14,8 +15,11 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize()
     {
-        $post=Post::find($this->route('post'));
-        return $post && $this->user()->can('update',$post);
+        Log::debug('authorize :',['Route parameter'=>$this->route('post')]);
+        $post=$this->route('post');
+        $answ=$post && $this->user()->can('update',$post);
+        Log::debug('authorize :',['post'=>$post->id,'answer'=>$answ]);
+        return $answ;
     }
 
     /**

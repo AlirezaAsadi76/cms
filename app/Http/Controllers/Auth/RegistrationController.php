@@ -26,7 +26,7 @@ class RegistrationController extends Controller
 
         auth()->login($user);
         //event(new Registered($user));
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
 
     }
     public function test(){

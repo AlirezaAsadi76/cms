@@ -6,6 +6,8 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -26,18 +28,19 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        //dd(request()->all());
+
+
         $post=new Post();
         $post->user_id=Auth::id();
         $post->details=$request->details;
         $post->title=$request->title;
         $post->thumbnail=$request->thumbnail;
         $post->sub_title=$request->sub_title;
-        $post->slug=str_slug($request->title);
+        $post->slug= str::slug($request->title);
         $post->post_type='post';
         $post->is_published=$request->publish;
         $post->save();
-        $post->categories()->sync($request->category_id,false);
+        $post->categories()->sync($request->category_id);
         session()->flash("message","Post created successfully");
         return redirect()->route('posts.index');
 
@@ -63,7 +66,7 @@ class PostController extends Controller
         $post->title=$request->title;
         $post->thumbnail=$request->thumbnail;
         $post->sub_title=$request->sub_title;
-        $post->slug=str_slug($request->title);
+        $post->slug=str::slug($request->title);
         $post->post_type='post';
         $post->is_published=$request->publish;
         $post->update();
@@ -78,4 +81,6 @@ class PostController extends Controller
         session()->flash('delete-message', 'Post deleted successfully');
         return redirect()->route('posts.index');
     }
+
+
 }

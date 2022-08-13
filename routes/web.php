@@ -39,9 +39,14 @@ Route::middleware('auth')->group(function (){
     Route::get('/email/verify',[Auth\EmailVerifyController::class,'Create'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}',[Auth\EmailVerifyController::class,'EmailVerification'])->middleware('signed')->name('verification.verify');
     Route::post('/email/verification-notification',[Auth\EmailVerifyController::class,'ReSend'])->middleware('throttle:6,1')->name('verification.send');
+    Route::get('/dashboard',Controllers\HomeController::class)->name('dashboard');
 
 });
 
 Route::middleware('auth')->prefix('admin')->group(function (){
-    Route::resource('post',Controllers\PostController::class);
+
+    Route::resource('posts',Controllers\PostController::class);
+    Route::resource('categories',Controllers\CategoryController::class);
+    Route::resource('pages',Controllers\PageController::class);
+    Route::resource('galleries',Controllers\GalleryController::class);
 });

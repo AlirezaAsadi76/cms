@@ -16,8 +16,19 @@ class PostFactory extends Factory
      */
     public function definition()
     {
+        $title=fake()->unique()->sentence;
+        $ispublished=['1','0'];
         return [
-            //
+            'user_id' => rand(1,5),
+            'title' => $title,
+            'slug' => str::slug($title),
+            'sub_title' =>fake()->sentence, // password
+            'details' => fake()->paragraph,
+            'post_type'=>'post',
+            'is_published'=>$ispublished[rand(0,1)],
+            'created_at'=>now(),
+            'updated_at'=>now(),
+
         ];
     }
 }

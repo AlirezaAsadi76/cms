@@ -17,7 +17,11 @@ class CategoryPostFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'category_id' => rand(1,5),
+            'post_id' =>rand(1,100),
+
+            'created_at'=>now(),
+            'updated_at'=>now(),
         ];
     }
 }

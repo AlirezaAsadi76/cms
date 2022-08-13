@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers;
 use \App\Http\Controllers\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,13 @@ Route::get('/register',[Auth\RegistrationController::class,'Create'])->name('Reg
 Route::post('/register',[Auth\RegistrationController::class,'Store'])->name('Register.Store');
 Route::get('/login',[Auth\LogingController::class,'Index'])->name('login');
 Route::Post('/login',[Auth\LogingController::class,'Authenticate'])->name('login');
+
+Route::get('/',[Controllers\WebsiteController::class,'index'])->name('web.index');
+Route::get('category/{slug}',[Controllers\WebsiteController::class , 'category'])->name('web.category');
+Route::get('post/{slug}',[Controllers\WebsiteController::class,'post'])->name('web.post');
+Route::get('page/{slug}',[Controllers\WebsiteController::class,'page'])->name('web.page');
+
+
 Route::middleware('auth')->group(function (){
 
 
